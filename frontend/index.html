@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('lms-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>Sign in — Library Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <button class="theme-toggle-floating" onclick="toggleTheme()" aria-label="Switch to dark mode"></button>
+
+  <div class="auth-screen">
+    <div class="catalog-card">
+      <h1>Reading Room</h1>
+      <div class="eyebrow">Library management, sign in to continue</div>
+
+      <div id="login-error" class="error-msg" style="display:none;"></div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Sign in</button>
+      </form>
+
+      <div class="hint">Default login — username: <strong>admin</strong>, password: <strong>admin123</strong></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    (async function redirectIfLoggedIn() {
+      try {
+        const { user } = await api.me();
+        if (user) window.location.href = "dashboard.html";
+      } catch (e) { /* not logged in, stay on this page */ }
+    })();
+
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const errorBox = document.getElementById("login-error");
+      errorBox.style.display = "none";
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        await api.login(username, password);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>

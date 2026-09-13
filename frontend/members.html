@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('lms-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
+<title>Members — Reading Room</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <div class="mobile-topbar">
+      <button class="menu-toggle" onclick="openSidebar()" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+      <div class="brand">Reading Room</div>
+      <div style="width:38px;"></div>
+    </div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="closeSidebar()" aria-label="Close menu">&times;</button>
+      <div class="brand">Reading Room</div>
+      <div class="brand-sub">Library Management System</div>
+      <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="books.html">Books</a>
+        <a href="members.html" class="active">Members</a>
+        <a href="transactions.html">Issue &amp; Return</a>
+      </nav>
+      <div class="user-box">
+        <div class="name" id="sidebar-user-name">—</div>
+        <div class="role" id="sidebar-user-role">—</div>
+        <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-toggle-label">Dark mode</span></button>
+        <button class="btn btn-secondary" style="width:100%" onclick="handleLogoutClick()">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <div>
+          <h1>Members</h1>
+          <p>Manage member records and borrowing eligibility.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openMemberModal()">Add a member</button>
+      </div>
+
+      <div class="ledger-panel">
+        <div class="ledger-toolbar">
+          <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search by name or email…">
+          </div>
+        </div>
+        <table class="ledger">
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="members-body">
+            <tr><td colspan="6" class="empty-state">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="member-modal">
+    <div class="modal-box">
+      <h2 id="member-modal-title">Add a member</h2>
+      <form id="member-form">
+        <input type="hidden" id="member-id">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="member-name">Full name</label>
+            <input type="text" id="member-name" required>
+          </div>
+          <div class="field full">
+            <label for="member-email">Email</label>
+            <input type="email" id="member-email" required>
+          </div>
+          <div class="field">
+            <label for="member-phone">Phone</label>
+            <input type="text" id="member-phone">
+          </div>
+          <div class="field">
+            <label for="member-status">Status</label>
+            <select id="member-status">
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="member-address">Address</label>
+            <input type="text" id="member-address">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeMemberModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/members.js"></script>
+</body>
+</html>
