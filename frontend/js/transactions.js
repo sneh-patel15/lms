@@ -120,6 +120,9 @@ async function openIssueModal() {
       ? activeMembers.map((m) => `<option value="${m.id}">${escapeHtml(m.name)} (${escapeHtml(m.email)})</option>`).join("")
       : `<option value="">No active members</option>`;
 
+    const daysInput = document.getElementById("issue-days");
+    if (daysInput) daysInput.value = "14";
+
     document.getElementById("issue-modal").classList.add("open");
   } catch (err) {
     showToast(err.message, true);
@@ -134,12 +137,19 @@ document.getElementById("issue-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const bookId = document.getElementById("issue-book").value;
   const memberId = document.getElementById("issue-member").value;
+  const daysInput = document.getElementById("issue-days");
+  const loanDays = daysInput ? parseInt(daysInput.value, 10) : 14;
+
   if (!bookId || !memberId) {
     showToast("Choose a book and a member first.", true);
     return;
   }
+  if (isNaN(loanDays) || loanDays < 1 || loanDays > 365) {
+    showToast("Loan duration must be between 1 and 365 days.", true);
+    return;
+  }
   try {
-    await api.issueBook(bookId, memberId);
+    await api.issueBook(bookId, memberId, loanDays);
     showToast("Book issued.");
     closeIssueModal();
     loadTransactions(document.getElementById("status-filter").value);

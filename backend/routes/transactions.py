@@ -50,7 +50,21 @@ def issue_book():
     if existing_loan:
         return jsonify({"error": "This member already has an active loan for this book."}), 400
 
-    loan_days = current_app.config["LOAN_PERIOD_DAYS"]
+    # Validate optional custom loan duration
+    raw_loan_days = data.get("loan_days")
+    default_days = current_app.config.get("LOAN_PERIOD_DAYS", 14)
+    if raw_loan_days is not None and str(raw_loan_days).strip() != "":
+        try:
+            loan_days = int(raw_loan_days)
+            if loan_days < 1:
+                return jsonify({"error": "Loan period must be at least 1 day."}), 400
+            if loan_days > 365:
+                return jsonify({"error": "Loan period cannot exceed 365 days."}), 400
+        except (ValueError, TypeError):
+            return jsonify({"error": "Loan period must be a valid number of days."}), 400
+    else:
+        loan_days = default_days
+
     txn = Transaction(
         book_id=book.id,
         member_id=member.id,

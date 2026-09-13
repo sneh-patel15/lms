@@ -43,8 +43,11 @@ const api = {
 
   listTransactions: (status = "") =>
     apiRequest(`/transactions${status ? `?status=${status}` : ""}`),
-  issueBook: (book_id, member_id) =>
-    apiRequest("/transactions/issue", { method: "POST", body: { book_id, member_id } }),
+  issueBook: (book_id, member_id, loan_days = undefined) =>
+    apiRequest("/transactions/issue", {
+      method: "POST",
+      body: { book_id, member_id, loan_days },
+    }),
   returnBook: (id) => apiRequest(`/transactions/return/${id}`, { method: "POST" }),
   toggleReady: (id, ready = undefined) =>
     apiRequest(`/transactions/ready/${id}`, {

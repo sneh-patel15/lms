@@ -81,6 +81,10 @@
           <label for="issue-member">Member</label>
           <select id="issue-member" required></select>
         </div>
+        <div class="field">
+          <label for="issue-days">Loan duration (days)</label>
+          <input type="number" id="issue-days" min="1" max="365" value="14" required>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeIssueModal()">Cancel</button>
           <button type="submit" class="btn btn-primary">Issue book</button>
