@@ -28,6 +28,12 @@ async function apiRequest(path, options = {}) {
 const api = {
   login: (username, password) =>
     apiRequest("/auth/login", { method: "POST", body: { username, password } }),
+  register: (payload) =>
+    apiRequest("/auth/register", { method: "POST", body: payload }),
+  forgotPassword: (login) =>
+    apiRequest("/auth/forgot-password", { method: "POST", body: { login } }),
+  resetPassword: (token, new_password) =>
+    apiRequest("/auth/reset-password", { method: "POST", body: { token, new_password } }),
   logout: () => apiRequest("/auth/logout", { method: "POST" }),
   me: () => apiRequest("/auth/me"),
 

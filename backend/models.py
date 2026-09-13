@@ -11,7 +11,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     full_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=True)
     role = db.Column(db.Enum("admin", "librarian", name="role_enum"), default="librarian")
+    reset_token = db.Column(db.String(100), nullable=True)
+    reset_token_expiry = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     def set_password(self, password):
@@ -25,6 +28,7 @@ class User(db.Model, UserMixin):
             "id": self.id,
             "username": self.username,
             "full_name": self.full_name,
+            "email": self.email,
             "role": self.role,
         }
 

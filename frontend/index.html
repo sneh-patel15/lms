@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{var t=localStorage.getItem('lms-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
-<title>Sign in — Library Management System</title>
+<title>Account Access — Library Management System</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,49 +13,316 @@
   <div class="auth-screen">
     <div class="catalog-card">
       <h1>Reading Room</h1>
-      <div class="eyebrow">Library management, sign in to continue</div>
+      <div class="eyebrow" id="auth-eyebrow">Library management, sign in to continue</div>
 
-      <div id="login-error" class="error-msg" style="display:none;"></div>
+      <div id="auth-error" class="error-msg" style="display:none;"></div>
+      <div id="auth-success" class="success-msg" style="display:none;"></div>
 
-      <form id="login-form">
-        <div class="field">
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" autocomplete="username" required>
+      <!-- Navigation Tabs (Login & Register) -->
+      <div class="auth-nav" id="auth-nav">
+        <button type="button" class="auth-nav-tab active" id="tab-login" onclick="showView('login')">Sign In</button>
+        <button type="button" class="auth-nav-tab" id="tab-register" onclick="showView('register')">Sign Up</button>
+      </div>
+
+      <!-- VIEW 1: SIGN IN -->
+      <div id="view-login">
+        <form id="login-form">
+          <div class="field">
+            <label for="login-id">Username or Email</label>
+            <input type="text" id="login-id" name="username" autocomplete="username" placeholder="e.g. admin or admin@library.com" required>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+          </div>
+          <div class="auth-sublink-row">
+            <a href="#" onclick="showView('forgot'); return false;">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Sign in</button>
+        </form>
+        <div class="auth-switch">
+          Don't have an account? <a href="#" onclick="showView('register'); return false;">Sign up here</a>
         </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" autocomplete="current-password" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-full">Sign in</button>
-      </form>
+        <div class="hint">Default login — username: <strong>admin</strong>, password: <strong>admin123</strong></div>
+      </div>
 
-      <div class="hint">Default login — username: <strong>admin</strong>, password: <strong>admin123</strong></div>
+      <!-- VIEW 2: SIGN UP -->
+      <div id="view-register" style="display:none;">
+        <form id="register-form">
+          <div class="field">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" placeholder="Jane Doe" required>
+          </div>
+          <div class="field">
+            <label for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" placeholder="jane@example.com" required>
+          </div>
+          <div class="field">
+            <label for="reg-username">Username</label>
+            <input type="text" id="reg-username" placeholder="janedoe" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="reg-password">Password (min. 6 characters)</label>
+            <input type="password" id="reg-password" minlength="6" placeholder="••••••••" autocomplete="new-password" required>
+          </div>
+          <div class="field">
+            <label for="reg-confirm-password">Confirm Password</label>
+            <input type="password" id="reg-confirm-password" minlength="6" placeholder="••••••••" autocomplete="new-password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        </form>
+        <div class="auth-switch">
+          Already have an account? <a href="#" onclick="showView('login'); return false;">Sign in</a>
+        </div>
+      </div>
+
+      <!-- VIEW 3: FORGOT PASSWORD -->
+      <div id="view-forgot" style="display:none;">
+        <p style="font-size: 0.84rem; color: var(--ink-soft); margin-top: 0; margin-bottom: 16px; line-height: 1.4;">
+          Enter your registered username or email. We will send you a secure password reset link and token.
+        </p>
+        <form id="forgot-form">
+          <div class="field">
+            <label for="forgot-login">Username or Email</label>
+            <input type="text" id="forgot-login" placeholder="e.g. admin or admin@library.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Send Reset Instructions</button>
+        </form>
+        <div class="auth-switch">
+          <a href="#" onclick="showView('login'); return false;">&larr; Back to Sign In</a>
+        </div>
+      </div>
+
+      <!-- VIEW 4: RESET PASSWORD -->
+      <div id="view-reset" style="display:none;">
+        <p style="font-size: 0.84rem; color: var(--ink-soft); margin-top: 0; margin-bottom: 16px; line-height: 1.4;">
+          Enter your reset token and choose a new password.
+        </p>
+        <form id="reset-form">
+          <div class="field">
+            <label for="reset-token">Reset Token</label>
+            <input type="text" id="reset-token" placeholder="Paste token from email" required>
+          </div>
+          <div class="field">
+            <label for="reset-new-password">New Password (min. 6 characters)</label>
+            <input type="password" id="reset-new-password" minlength="6" placeholder="••••••••" autocomplete="new-password" required>
+          </div>
+          <div class="field">
+            <label for="reset-confirm-password">Confirm New Password</label>
+            <input type="password" id="reset-confirm-password" minlength="6" placeholder="••••••••" autocomplete="new-password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Save New Password</button>
+        </form>
+        <div class="auth-switch">
+          <a href="#" onclick="showView('login'); return false;">&larr; Back to Sign In</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <script src="js/api.js"></script>
   <script>
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute("data-theme");
+      const next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("lms-theme", next);
+    }
+
+    const views = {
+      login: {
+        el: document.getElementById("view-login"),
+        title: "Sign in — Library Management System",
+        eyebrow: "Library management, sign in to continue",
+        showNav: true,
+        tabId: "tab-login",
+      },
+      register: {
+        el: document.getElementById("view-register"),
+        title: "Create Account — Library Management System",
+        eyebrow: "Create a staff account to get started",
+        showNav: true,
+        tabId: "tab-register",
+      },
+      forgot: {
+        el: document.getElementById("view-forgot"),
+        title: "Forgot Password — Library Management System",
+        eyebrow: "Reset your password via registered email",
+        showNav: false,
+        tabId: null,
+      },
+      reset: {
+        el: document.getElementById("view-reset"),
+        title: "Reset Password — Library Management System",
+        eyebrow: "Set a new password for your account",
+        showNav: false,
+        tabId: null,
+      },
+    };
+
+    function showError(msg) {
+      const errorBox = document.getElementById("auth-error");
+      const successBox = document.getElementById("auth-success");
+      successBox.style.display = "none";
+      errorBox.textContent = msg;
+      errorBox.style.display = "block";
+    }
+
+    function showSuccess(msg) {
+      const errorBox = document.getElementById("auth-error");
+      const successBox = document.getElementById("auth-success");
+      errorBox.style.display = "none";
+      successBox.textContent = msg;
+      successBox.style.display = "block";
+    }
+
+    function clearMessages() {
+      document.getElementById("auth-error").style.display = "none";
+      document.getElementById("auth-success").style.display = "none";
+    }
+
+    function showView(name) {
+      clearMessages();
+      Object.keys(views).forEach((k) => {
+        views[k].el.style.display = k === name ? "block" : "none";
+      });
+
+      const config = views[name];
+      if (config) {
+        document.title = config.title;
+        document.getElementById("auth-eyebrow").textContent = config.eyebrow;
+        document.getElementById("auth-nav").style.display = config.showNav ? "flex" : "none";
+
+        document.querySelectorAll(".auth-nav-tab").forEach((tab) => tab.classList.remove("active"));
+        if (config.tabId) {
+          const tab = document.getElementById(config.tabId);
+          if (tab) tab.classList.add("active");
+        }
+      }
+    }
+
+    // Check if user is already authenticated
     (async function redirectIfLoggedIn() {
       try {
         const { user } = await api.me();
         if (user) window.location.href = "dashboard.html";
-      } catch (e) { /* not logged in, stay on this page */ }
+      } catch (e) { /* not logged in, stay on auth screen */ }
     })();
 
+    // Check URL parameters for view or token
+    (function handleUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("token");
+      const viewParam = params.get("view");
+
+      if (token) {
+        showView("reset");
+        document.getElementById("reset-token").value = token;
+      } else if (viewParam && views[viewParam]) {
+        showView(viewParam);
+      }
+    })();
+
+    // 1. Sign In form handler
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const errorBox = document.getElementById("login-error");
-      errorBox.style.display = "none";
-
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
+      clearMessages();
+      const loginId = document.getElementById("login-id").value.trim();
+      const password = document.getElementById("login-password").value;
 
       try {
-        await api.login(username, password);
+        await api.login(loginId, password);
         window.location.href = "dashboard.html";
       } catch (err) {
-        errorBox.textContent = err.message;
-        errorBox.style.display = "block";
+        showError(err.message);
+      }
+    });
+
+    // 2. Sign Up form handler
+    document.getElementById("register-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const fullName = document.getElementById("reg-name").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const username = document.getElementById("reg-username").value.trim();
+      const password = document.getElementById("reg-password").value;
+      const confirmPassword = document.getElementById("reg-confirm-password").value;
+
+      if (password !== confirmPassword) {
+        showError("Passwords do not match. Please verify and try again.");
+        return;
+      }
+
+      try {
+        await api.register({
+          full_name: fullName,
+          email: email,
+          username: username,
+          password: password,
+        });
+        showSuccess("Account created successfully! Redirecting to dashboard...");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1200);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    // 3. Forgot Password form handler
+    document.getElementById("forgot-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const login = document.getElementById("forgot-login").value.trim();
+      const submitBtn = e.target.querySelector("button[type='submit']");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      try {
+        const res = await api.forgotPassword(login);
+        showSuccess(res.message);
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Reset Instructions";
+      }
+    });
+
+    // 4. Reset Password form handler
+    document.getElementById("reset-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const token = document.getElementById("reset-token").value.trim();
+      const newPassword = document.getElementById("reset-new-password").value;
+      const confirmPassword = document.getElementById("reset-confirm-password").value;
+
+      if (newPassword !== confirmPassword) {
+        showError("Passwords do not match. Please verify and try again.");
+        return;
+      }
+
+      const submitBtn = e.target.querySelector("button[type='submit']");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Saving...";
+
+      try {
+        const res = await api.resetPassword(token, newPassword);
+        showSuccess(res.message);
+        setTimeout(() => {
+          showView("login");
+          document.getElementById("login-id").value = "";
+          document.getElementById("login-password").value = "";
+        }, 2200);
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Save New Password";
       }
     });
   </script>

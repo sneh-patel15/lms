@@ -199,6 +199,71 @@ button, input, select { font-family: inherit; }
   margin-bottom: 14px;
 }
 
+.success-msg {
+  background: var(--badge-ok-bg);
+  border: 1px solid var(--forest);
+  color: var(--forest);
+  padding: 9px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}
+
+.auth-nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+
+.auth-nav-tab {
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s var(--ease);
+}
+
+.auth-nav-tab:hover {
+  color: var(--ink);
+}
+
+.auth-nav-tab.active {
+  background: var(--brass-soft);
+  color: var(--brass-dark);
+}
+
+.auth-sublink-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+  margin-bottom: 16px;
+}
+
+.auth-sublink-row a, .auth-switch a {
+  font-size: 0.82rem;
+  color: var(--brass-dark);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-sublink-row a:hover, .auth-switch a:hover {
+  text-decoration: underline;
+}
+
+.auth-switch {
+  text-align: center;
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+  margin-top: 18px;
+}
+
 .hint {
   text-align: center;
   font-size: 0.78rem;
